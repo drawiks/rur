@@ -1,5 +1,5 @@
 pkgname=pkgconf
-pkgver=1.8.1
+pkgver=2.2.0
 pkgrel=1
 pkgdesc="Package compiler and linker metadata tool (RezzOS seed)"
 url="https://pkgconf.org"
@@ -8,7 +8,7 @@ arch=('x86_64')
 depends=('musl')
 
 source=("https://github.com/drawiks/rur/releases/download/seed-v1/pkgconf-${pkgver}-x86_64.tar.gz")
-sha256sums=('85cea451eec057fa7e734548ca3ba6d779ed5836a3f9de14b8394575ef0d7d8e')
+sha256sums=('a8d8451c17081ec7efd197d84106a45b88b686c74a2f117f8e095f36d1fa2c76')
 
 package() {
     cp -a "${srcdir}/usr" "${pkgdir}/"
