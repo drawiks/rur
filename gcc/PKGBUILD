@@ -8,7 +8,7 @@ arch=('x86_64')
 depends=('binutils' 'musl')
 
 source=("https://github.com/drawiks/rur/releases/download/seed-v1/gcc-${pkgver}-rezzos-x86_64.tar.gz")
-sha256sums=('214c68ad98f0cd3b69831c89e43fa5f8d28d00d2936dffe3c196dbddf7d4174b')
+sha256sums=('ed7dee7b9ab8c99ac92978cfb61196bbeeae9283878a5b290047c4210800d3ea')
 
 package() {
     cp -a "${srcdir}/usr" "${pkgdir}/"
