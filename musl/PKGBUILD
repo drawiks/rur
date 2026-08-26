@@ -1,0 +1,16 @@
+pkgname=musl
+pkgver=1.2.5
+pkgrel=1
+pkgdesc="musl C library (runtime + dev, RezzOS seed)"
+url="https://musl.libc.org"
+license=('MIT')
+arch=('x86_64')
+depends=()
+
+source=("https://github.com/drawiks/rur/releases/download/seed-v1/musl-${pkgver}-x86_64.tar.gz")
+sha256sums=('7faba336f96631c1b09caf8f403f9d7e5cc51e8a0f9efedaf3435617bacfb392')
+
+package() {
+    cp -a "${srcdir}/lib" "${pkgdir}/"
+    cp -a "${srcdir}/usr" "${pkgdir}/"
+}

@@ -1,0 +1,15 @@
+pkgname=binutils
+pkgver=2.42
+pkgrel=1
+pkgdesc="GNU Binutils (RezzOS seed)"
+url="https://www.gnu.org/software/binutils"
+license=('GPL3')
+arch=('x86_64')
+depends=('musl')
+
+source=("https://github.com/drawiks/rur/releases/download/seed-v1/binutils-${pkgver}-x86_64.tar.gz")
+sha256sums=('aa1d8c1e5599f9a1b617d6593cddbd68c0af7516c54a8d7fdee59296e5d94d0e')
+
+package() {
+    cp -a "${srcdir}/usr" "${pkgdir}/"
+}

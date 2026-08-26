@@ -1,0 +1,15 @@
+pkgname=gcc
+pkgver=13.2.0
+pkgrel=1
+pkgdesc="GNU Compiler Collection (RezzOS seed)"
+url="https://gcc.gnu.org"
+license=('GPL3')
+arch=('x86_64')
+depends=('binutils' 'musl')
+
+source=("https://github.com/drawiks/rur/releases/download/seed-v1/gcc-${pkgver}-rezzos-x86_64.tar.gz")
+sha256sums=('d4a30558ddc5dd22cd08790dfd7d97cb9a1a9df17e789a75c051b157a08986c1')
+
+package() {
+    cp -a "${srcdir}/usr" "${pkgdir}/"
+}
