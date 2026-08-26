@@ -1,0 +1,33 @@
+pkgname=ncurses
+pkgver=6.5
+pkgrel=1
+pkgdesc="Terminal handling library"
+url="https://invisible-island.net/ncurses"
+license=('MIT')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make')
+
+source=("https://ftp.gnu.org/pub/gnu/ncurses/ncurses-${pkgver}.tar.gz")
+sha256sums=('136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6')
+
+build() {
+    cd "${srcdir}/ncurses-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --with-shared \
+        --with-termlib \
+        --without-debug \
+        --without-normal \
+        --enable-pc-files \
+        --with-pkg-config-libdir=/usr/lib/pkgconfig \
+        --with-default-terminfo-dir=/usr/share/terminfo \
+        --with-terminfo-dirs=/usr/share/terminfo:/usr/share/terminfo/gnome:/usr/share/terminfo/v
+    make
+}
+
+package() {
+    cd "${srcdir}/ncurses-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/"lib*.a
+}

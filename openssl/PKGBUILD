@@ -1,0 +1,29 @@
+pkgname=openssl
+pkgver=3.5.8
+pkgrel=1
+pkgdesc="Toolkit for Transport Layer Security (TLS) and generic cryptography library"
+url="https://openssl.org"
+license=('Apache-2.0')
+arch=('x86_64')
+depends=('musl' 'zlib')
+makedepends=('make' 'perl')
+
+source=("https://github.com/openssl/openssl/releases/download/openssl-${pkgver}/openssl-${pkgver}.tar.gz")
+sha256sums=('a8f84a39918ec6415ce765d9b429d313ba97b8143169c172e734b9514464f5b2')
+
+build() {
+    cd "${srcdir}/openssl-${pkgver}"
+    ./Configure \
+        --prefix=/usr \
+        --openssldir=/etc/ssl \
+        shared \
+        zlib \
+        linux-x86_64
+    make
+}
+
+package() {
+    cd "${srcdir}/openssl-${pkgver}"
+    make DESTDIR="${pkgdir}" install_sw install_ssldirs
+    rm -f "${pkgdir}/usr/lib/libssl.a" "${pkgdir}/usr/lib/libcrypto.a"
+}

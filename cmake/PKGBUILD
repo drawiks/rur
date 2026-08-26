@@ -1,0 +1,30 @@
+pkgname=cmake
+pkgver=3.30.2
+pkgrel=1
+pkgdesc="Cross-platform, open-source build system"
+url="https://cmake.org"
+license=('BSD-3-Clause')
+arch=('x86_64')
+depends=('musl' 'openssl' 'zlib' 'curl' 'ncurses' 'gcc' 'make')
+makedepends=('make' 'gcc')
+
+source=("https://github.com/Kitware/CMake/releases/download/v${pkgver}/cmake-${pkgver}.tar.gz")
+sha256sums=('46074c781eccebc433e98f0bbfa265ca3fd4381f245ca3b140e7711531d60db2')
+
+build() {
+    cd "${srcdir}/cmake-${pkgver}"
+    ./bootstrap \
+        --prefix=/usr \
+        --system-curl \
+        --system-zlib \
+        --system-openssl \
+        --system-ncurses \
+        --parallel=$(nproc) \
+        --no-system-libarchive
+    make
+}
+
+package() {
+    cd "${srcdir}/cmake-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

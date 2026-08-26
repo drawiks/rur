@@ -1,0 +1,30 @@
+pkgname=curl
+pkgver=8.21.0
+pkgrel=1
+pkgdesc="URL transfer library and tools"
+url="https://curl.se"
+license=('MIT')
+arch=('x86_64')
+depends=('openssl' 'zlib' 'musl')
+makedepends=('make')
+
+source=("https://curl.se/download/curl-${pkgver}.tar.xz")
+sha256sums=('aa1b66a70eace83dc624508745646c08ae561de512ab403adffb93ac87fc72e6')
+
+build() {
+    cd "${srcdir}/curl-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --with-openssl \
+        --with-zlib \
+        --disable-static \
+        --enable-ipv6 \
+        --disable-manual
+    make
+}
+
+package() {
+    cd "${srcdir}/curl-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/libcurl.la"
+}

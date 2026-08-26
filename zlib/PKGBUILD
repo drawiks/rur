@@ -1,0 +1,26 @@
+pkgname=zlib
+pkgver=1.3.2
+pkgrel=1
+pkgdesc="Compression library implementing the deflate compression method"
+url="https://zlib.net"
+license=('zlib')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make')
+
+source=("https://zlib.net/zlib-${pkgver}.tar.gz")
+sha256sums=('bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16')
+
+build() {
+    cd "${srcdir}/zlib-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --shared
+    make
+}
+
+package() {
+    cd "${srcdir}/zlib-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/libz.a"
+}

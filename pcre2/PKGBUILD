@@ -1,0 +1,33 @@
+pkgname=pcre2
+pkgver=10.45
+pkgrel=1
+pkgdesc="Regular expression library (newgeneration)"
+url="https://www.pcre.org"
+license=('BSD-3-Clause')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'cmake' 'gcc')
+
+source=("https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${pkgver}/pcre2-${pkgver}.tar.gz")
+sha256sums=('0e138387df7835d7403b8351e2226c1377da804e0737db0e071b48f07c9d12ee')
+
+build() {
+    cd "${srcdir}/pcre2-${pkgver}"
+    cmake -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=ON \
+        -DPCRE2_SUPPORT_JIT=OFF \
+        -DPCRE2_SUPPORT_UNICODE=ON \
+        -DPCRE2_8BIT=ON \
+        -DPCRE2_16BIT=ON \
+        -DPCRE2_32BIT=OFF \
+        -G "Unix Makefiles"
+    cmake --build build
+}
+
+package() {
+    cd "${srcdir}/pcre2-${pkgver}"
+    DESTDIR="${pkgdir}" cmake --install build
+    rm -f "${pkgdir}/usr/lib/"libpcre2-*.a
+}

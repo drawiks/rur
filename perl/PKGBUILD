@@ -1,0 +1,30 @@
+pkgname=perl
+pkgver=5.44.0
+pkgrel=1
+pkgdesc="Larry Wall's Practical Extraction and Report Language"
+url="https://www.perl.org"
+license=('Artistic-1.0-Perl OR GPL-1.0-or-later')
+arch=('x86_64')
+depends=('musl' 'zlib' 'bzip2')
+makedepends=('make')
+
+source=("https://www.cpan.org/src/5.0/perl-${pkgver}.tar.gz")
+sha256sums=('3b855066b92491cb40e86affb1ca57d1a388aa43e51b91c7806a32c2f65f96c3')
+
+build() {
+    cd "${srcdir}/perl-${pkgver}"
+    sh Configure \
+        -des \
+        -Dprefix=/usr \
+        -Dvendorprefix=/usr \
+        -Dman1dir=none \
+        -Dman3dir=none \
+        -Dusethreads \
+        -Dcc="gcc"
+    make
+}
+
+package() {
+    cd "${srcdir}/perl-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

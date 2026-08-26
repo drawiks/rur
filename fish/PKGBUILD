@@ -1,0 +1,30 @@
+pkgname=fish
+pkgver=3.7.1
+pkgrel=1
+pkgdesc="Smart and user-friendly command line shell"
+url="https://fishshell.com"
+license=('GPL-2.0-only')
+arch=('x86_64')
+depends=('musl' 'ncurses' 'pcre2')
+makedepends=('make' 'cmake' 'gcc')
+
+source=("https://github.com/fish-shell/fish-shell/releases/download/${pkgver}/fish-${pkgver}.tar.xz")
+sha256sums=('614c9f5643cd0799df391395fa6bbc3649427bb839722ce3b114d3bbc1a3b250')
+
+build() {
+    cd "${srcdir}/fish-${pkgver}"
+    cmake -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_SKIP_INSTALL_RPATH=ON \
+        -DFISH_USE_SYSTEM_PCRE2=ON \
+        -DWITH_MESSAGE_LOCALIZATION=OFF \
+        -DCMAKE_INSTALL_SYSCONFDIR=/etc \
+        -G "Unix Makefiles"
+    cmake --build build
+}
+
+package() {
+    cd "${srcdir}/fish-${pkgver}"
+    DESTDIR="${pkgdir}" cmake --install build
+}
