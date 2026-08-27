@@ -1,0 +1,24 @@
+pkgname=ripgrep
+pkgver=14.1.1
+pkgrel=1
+pkgdesc="Recursively searches directories for a regex pattern"
+url="https://github.com/BurntSushi/ripgrep"
+license=('MIT' 'Unlicense')
+arch=('x86_64')
+depends=('musl' 'rust')
+makedepends=()
+
+source=("https://github.com/BurntSushi/ripgrep/archive/refs/tags/${pkgver}.tar.gz")
+sha256sums=('4dad02a2f9c8c3c8d89434e47337aa654cb0e2aa50e806589132f186bf5c2b66')
+
+build() {
+    cd "${srcdir}/ripgrep-${pkgver}"
+    cargo build --release
+}
+
+package() {
+    cd "${srcdir}/ripgrep-${pkgver}"
+    install -Dm755 target/release/rg "${pkgdir}/usr/bin/rg"
+    install -Dm644 LICENSE-MIT "${pkgdir}/usr/share/licenses/ripgrep/LICENSE-MIT"
+    install -Dm644 COPYING "${pkgdir}/usr/share/licenses/ripgrep/COPYING"
+}

@@ -1,0 +1,25 @@
+pkgname=micro
+pkgver=2.0.15
+pkgrel=1
+pkgdesc="A modern and intuitive terminal-based text editor"
+url="https://micro-editor.github.io/"
+license=('MIT')
+arch=('x86_64')
+depends=('musl' 'go')
+makedepends=()
+
+source=("https://github.com/micro-editor/micro/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('612c775321c268c8f9e1767505ff378bca9b9ab66f5c41b69ecb2464ecf15084')
+
+build() {
+    cd "${srcdir}/micro-${pkgver}"
+    export GOPATH="${srcdir}/gopath"
+    export GOCACHE="${srcdir}/gocache"
+    make build
+}
+
+package() {
+    cd "${srcdir}/micro-${pkgver}"
+    install -Dm755 micro "${pkgdir}/usr/bin/micro"
+    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/micro/LICENSE"
+}

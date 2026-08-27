@@ -1,0 +1,29 @@
+pkgname=rust
+pkgver=1.98.0
+pkgrel=1
+pkgdesc="Rust systems programming language toolchain (musl seed: rustc, cargo, rust-std)"
+url="https://www.rust-lang.org/"
+license=('MIT' 'Apache-2.0')
+arch=('x86_64')
+depends=('musl')
+makedepends=()
+
+source=(
+    "https://static.rust-lang.org/dist/rustc-${pkgver}-x86_64-unknown-linux-musl.tar.xz"
+    "https://static.rust-lang.org/dist/rust-std-${pkgver}-x86_64-unknown-linux-musl.tar.xz"
+    "https://static.rust-lang.org/dist/cargo-${pkgver}-x86_64-unknown-linux-musl.tar.xz"
+)
+sha256sums=(
+    '4783d0963e5566b03e5e5be6bcb900672c177389d148d138fe1d75bc52554c91'
+    '1a76f782db2d540e1cd16ea47829b323f4a8f4dda64bca4b23be189109c510f8'
+    '8a4da98a9a099e2bf8c210a236cd0cc8d6a259254f4b8fdf6997177ea9e1e4bf'
+)
+
+package() {
+    cd "${srcdir}/rustc-${pkgver}-x86_64-unknown-linux-musl"
+    ./install.sh --prefix=/usr --destdir="${pkgdir}" --disable-ldconfig -v
+    cd "${srcdir}/rust-std-${pkgver}-x86_64-unknown-linux-musl"
+    ./install.sh --prefix=/usr --destdir="${pkgdir}" -v
+    cd "${srcdir}/cargo-${pkgver}-x86_64-unknown-linux-musl"
+    ./install.sh --prefix=/usr --destdir="${pkgdir}" -v
+}

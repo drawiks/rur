@@ -1,0 +1,18 @@
+pkgname=7z
+pkgver=26.02
+pkgrel=1
+pkgdesc="7-Zip file archiver with high compression ratio (static musl binary)"
+url="https://www.7-zip.org/"
+license=('LGPL-2.1-or-later' 'BSD-3-Clause')
+arch=('x86_64')
+depends=('musl')
+makedepends=()
+
+source=("https://www.7-zip.org/a/7z${pkgver//./}-linux-x64.tar.xz")
+sha256sums=('41aaba7b1235304ab5aa0624530c67ae829496cd29e875925271efdccc28c03e')
+
+package() {
+    cd "${srcdir}/7z-content"
+    install -Dm755 7zzs "${pkgdir}/usr/bin/7zzs"
+    ln -s 7zzs "${pkgdir}/usr/bin/7z"
+}

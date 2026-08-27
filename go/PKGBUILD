@@ -1,0 +1,20 @@
+pkgname=go
+pkgver=1.27.0
+pkgrel=1
+pkgdesc="Go programming language compiler and toolchain (official static amd64 seed)"
+url="https://go.dev/"
+license=('BSD-3-Clause')
+arch=('x86_64')
+depends=('musl')
+makedepends=()
+
+source=("https://go.dev/dl/go${pkgver}.linux-amd64.tar.gz")
+sha256sums=('675c26c449cbb18fc24b74650de1eabbae6e16f64326fd85a283fb3b58280685')
+
+package() {
+    cd "${srcdir}"
+    mkdir -p "${pkgdir}/usr/lib"
+    cp -ar go "${pkgdir}/usr/lib/"
+    ln -s /usr/lib/go/bin/go "${pkgdir}/usr/bin/go"
+    ln -s /usr/lib/go/bin/gofmt "${pkgdir}/usr/bin/gofmt"
+}

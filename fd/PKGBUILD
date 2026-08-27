@@ -1,0 +1,23 @@
+pkgname=fd
+pkgver=10.2.0
+pkgrel=1
+pkgdesc="A simple, fast and user-friendly alternative to 'find'"
+url="https://github.com/sharkdp/fd"
+license=('MIT')
+arch=('x86_64')
+depends=('musl' 'rust')
+makedepends=()
+
+source=("https://github.com/sharkdp/fd/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('73329fe24c53f0ca47cd0939256ca5c4644742cb7c14cf4114c8c9871336d342')
+
+build() {
+    cd "${srcdir}/fd-${pkgver}"
+    cargo build --release
+}
+
+package() {
+    cd "${srcdir}/fd-${pkgver}"
+    install -Dm755 target/release/fd "${pkgdir}/usr/bin/fd"
+    install -Dm644 LICENSE-MIT "${pkgdir}/usr/share/licenses/fd/LICENSE-MIT"
+}
