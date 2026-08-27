@@ -8,7 +8,7 @@ arch=('x86_64')
 depends=('musl')
 
 source=("https://github.com/drawiks/rur/releases/download/seed-v1/binutils-${pkgver}-x86_64.tar.gz")
-sha256sums=('09af8799568935fb63982c2d1f864ec54d903e61d2268fcb789f088a31e22f48')
+sha256sums=('45665fb502173d919b884bf38af6203a85f26b2b3db5b5ff54b8b3c40abf3f53')
 
 package() {
     cp -a "${srcdir}/usr" "${pkgdir}/"
