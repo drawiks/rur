@@ -1,0 +1,23 @@
+pkgname=zstd
+pkgver=1.5.7
+pkgrel=1
+pkgdesc="Zstandard - Fast real-time compression algorithm"
+url="https://facebook.github.io/zstd/"
+license=('BSD-3-Clause' 'GPL-2.0-only')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://github.com/facebook/zstd/releases/download/v${pkgver}/zstd-${pkgver}.tar.gz")
+sha256sums=('eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3')
+
+build() {
+    cd "${srcdir}/zstd-${pkgver}"
+    make PREFIX=/usr -j$(nproc)
+}
+
+package() {
+    cd "${srcdir}/zstd-${pkgver}"
+    make PREFIX="${pkgdir}/usr" install
+    rm -f "${pkgdir}/usr/lib/libzstd.a"
+}

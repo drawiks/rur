@@ -1,0 +1,28 @@
+pkgname=readline
+pkgver=8.2.13
+pkgrel=1
+pkgdesc="GNU readline library"
+url="https://tiswww.case.edu/php/chet/readline/rltop.html"
+license=('GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'ncurses')
+makedepends=('make' 'gcc')
+
+source=("https://ftp.gnu.org/gnu/readline/readline-${pkgver}.tar.gz")
+sha256sums=('0e5be4d2937e8bd9b7cd60d46721ce79f88a33415dd68c2d738fb5924638f656')
+
+build() {
+    cd "${srcdir}/readline-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --with-curses \
+        --disable-static \
+        --enable-multibyte
+    make SHLIB_LIBS="-lncursesw"
+}
+
+package() {
+    cd "${srcdir}/readline-${pkgver}"
+    make DESTDIR="${pkgdir}" install SHLIB_LIBS="-lncursesw"
+    rm -f "${pkgdir}/usr/lib/"libreadline.a "${pkgdir}/usr/lib/"libhistory.a
+}

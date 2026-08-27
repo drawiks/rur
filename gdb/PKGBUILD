@@ -1,0 +1,27 @@
+pkgname=gdb
+pkgver=16.2
+pkgrel=1
+pkgdesc="The GNU Debugger"
+url="https://www.gnu.org/software/gdb/"
+license=('GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'ncurses' 'readline' 'zlib')
+makedepends=('make' 'gcc')
+
+source=("https://ftp.gnu.org/gnu/gdb/gdb-${pkgver}.tar.xz")
+sha256sums=('4002cb7f23f45c37c790536a13a720942ce4be0402d929c9085e92f10d480119')
+
+build() {
+    cd "${srcdir}/gdb-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-nls \
+        --disable-source-highlight \
+        --disable-tui
+    make
+}
+
+package() {
+    cd "${srcdir}/gdb-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

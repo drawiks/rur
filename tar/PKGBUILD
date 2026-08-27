@@ -1,0 +1,25 @@
+pkgname=tar
+pkgver=1.35
+pkgrel=1
+pkgdesc="Utility used to store, backup, and transport files"
+url="https://www.gnu.org/software/tar/"
+license=('GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'zlib' 'bzip2' 'xz')
+makedepends=('make' 'gcc')
+
+source=("https://ftp.gnu.org/gnu/tar/tar-${pkgver}.tar.gz")
+sha256sums=('14d55e32063ea9526e057fbf35fcabd53378e769787eff7919c3755b02d2b57e')
+
+build() {
+    cd "${srcdir}/tar-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-nls
+    make
+}
+
+package() {
+    cd "${srcdir}/tar-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

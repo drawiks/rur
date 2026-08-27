@@ -1,0 +1,25 @@
+pkgname=socat
+pkgver=1.8.0.3
+pkgrel=1
+pkgdesc="Multipurpose relay for bidirectional data transfer"
+url="http://www.dest-unreach.org/socat/"
+license=('GPL-2.0-only')
+arch=('x86_64')
+depends=('musl' 'openssl')
+makedepends=('make' 'gcc')
+
+source=("http://www.dest-unreach.org/socat/download/socat-${pkgver}.tar.gz")
+sha256sums=('a9f9eb6cfb9aa6b1b4b8fe260edbac3f2c743f294db1e362b932eb3feca37ba4')
+
+build() {
+    cd "${srcdir}/socat-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-nls
+    make
+}
+
+package() {
+    cd "${srcdir}/socat-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

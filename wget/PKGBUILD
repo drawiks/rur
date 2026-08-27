@@ -1,0 +1,27 @@
+pkgname=wget
+pkgver=1.25.0
+pkgrel=1
+pkgdesc="Network utility to retrieve files from the Web"
+url="https://www.gnu.org/software/wget/"
+license=('GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'openssl' 'zlib')
+makedepends=('make' 'gcc')
+
+source=("https://ftp.gnu.org/gnu/wget/wget-${pkgver}.tar.gz")
+sha256sums=('766e48423e79359ea31e41db9e5c289675947a7fcf2efdcedb726ac9d0da3784')
+
+build() {
+    cd "${srcdir}/wget-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --with-ssl=openssl \
+        --disable-nls \
+        --disable-iri
+    make
+}
+
+package() {
+    cd "${srcdir}/wget-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

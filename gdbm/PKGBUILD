@@ -1,0 +1,27 @@
+pkgname=gdbm
+pkgver=1.24
+pkgrel=1
+pkgdesc="GNU database manager"
+url="https://www.gnu.org/software/gdbm/"
+license=('GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://ftp.gnu.org/gnu/gdbm/gdbm-${pkgver}.tar.gz")
+sha256sums=('695e9827fdf763513f133910bc7e6cfdb9187943a4fec943e57449723d2b8dbf')
+
+build() {
+    cd "${srcdir}/gdbm-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-static \
+        --disable-nls
+    make
+}
+
+package() {
+    cd "${srcdir}/gdbm-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/libgdbm.a"
+}

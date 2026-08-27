@@ -1,0 +1,27 @@
+pkgname=man-db
+pkgver=2.13.0
+pkgrel=1
+pkgdesc="A utility for reading and searching manual pages"
+url="https://www.nongnu.org/man-db/"
+license=('GPL-3.0-or-later' 'LGPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'zlib' 'gdbm')
+makedepends=('make' 'gcc')
+
+source=("https://download.savannah.gnu.org/releases/man-db/man-db-${pkgver}.tar.xz")
+sha256sums=('82f0739f4f61aab5eb937d234de3b014e777b5538a28cbd31433c45ae09aefb9')
+
+build() {
+    cd "${srcdir}/man-db-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --without-libpipeline \
+        --disable-nls \
+        --disable-setuid
+    make
+}
+
+package() {
+    cd "${srcdir}/man-db-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

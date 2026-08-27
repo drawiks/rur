@@ -1,0 +1,25 @@
+pkgname=zip
+pkgver=3.0
+pkgrel=1
+pkgdesc="Creates PKZIP-compatible .zip files"
+url="https://infozip.sourceforge.net/Zip.html"
+license=('custom:Info-ZIP')
+arch=('x86_64')
+depends=('musl' 'zlib')
+makedepends=('make' 'gcc')
+
+source=("https://downloads.sourceforge.net/infozip/zip30.zip")
+sha256sums=('7061ceac0407682b6dc54bb480347205f680f4e56cf34fe1423df2309f18968a')
+
+build() {
+    cd "${srcdir}/zip30"
+    make -f unix/Makefile generic
+}
+
+package() {
+    cd "${srcdir}/zip30"
+    make -f unix/Makefile install \
+        prefix="${pkgdir}/usr" \
+        BINDIR="${pkgdir}/usr/bin" \
+        MANDIR="${pkgdir}/usr/share/man/man1"
+}

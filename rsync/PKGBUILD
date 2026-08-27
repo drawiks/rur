@@ -1,0 +1,26 @@
+pkgname=rsync
+pkgver=3.3.0
+pkgrel=1
+pkgdesc="Fast and versatile file copying tool for remote and local files"
+url="https://rsync.samba.org/"
+license=('GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'zlib')
+makedepends=('make' 'gcc')
+
+source=("https://github.com/WayneD/rsync/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('bbc07ef74ac9e9b1506f7029c3a3630dd24cf270ee5256e96553bbd1cfd21610')
+
+build() {
+    cd "${srcdir}/rsync-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-popt \
+        --disable-md2man
+    make
+}
+
+package() {
+    cd "${srcdir}/rsync-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

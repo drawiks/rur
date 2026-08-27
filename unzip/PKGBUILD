@@ -1,0 +1,25 @@
+pkgname=unzip
+pkgver=6.0
+pkgrel=1
+pkgdesc="Extracts PKZIP-compatible .zip files"
+url="https://infozip.sourceforge.net/UnZip.html"
+license=('custom:Info-ZIP')
+arch=('x86_64')
+depends=('musl' 'zlib' 'bzip2')
+makedepends=('make' 'gcc')
+
+source=("https://downloads.sourceforge.net/infozip/unzip60.tar.gz")
+sha256sums=('036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37')
+
+build() {
+    cd "${srcdir}/unzip60"
+    make -f unix/Makefile generic
+}
+
+package() {
+    cd "${srcdir}/unzip60"
+    make -f unix/Makefile install \
+        prefix="${pkgdir}/usr" \
+        BINDIR="${pkgdir}/usr/bin" \
+        MANDIR="${pkgdir}/usr/share/man/man1"
+}

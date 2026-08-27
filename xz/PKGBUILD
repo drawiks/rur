@@ -1,0 +1,28 @@
+pkgname=xz
+pkgver=5.8.2
+pkgrel=1
+pkgdesc="Library and command line tools for XZ and LZMA compressed files"
+url="https://tukaani.org/xz/"
+license=('0BSD' 'GPL-2.0-or-later' 'GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://github.com/tukaani-project/xz/releases/download/v${pkgver}/xz-${pkgver}.tar.xz")
+sha256sums=('890966ec3f5d5cc151077879e157c0593500a522f413ac50ba26d22a9a145214')
+
+build() {
+    cd "${srcdir}/xz-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-static \
+        --disable-doc \
+        --disable-nls
+    make
+}
+
+package() {
+    cd "${srcdir}/xz-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/lib"*.a
+}

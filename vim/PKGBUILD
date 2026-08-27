@@ -1,0 +1,32 @@
+pkgname=vim
+pkgver=9.1.0900
+pkgrel=1
+pkgdesc="Vi Improved, a highly configurable text editor"
+url="https://www.vim.org/"
+license=('Vim')
+arch=('x86_64')
+depends=('musl' 'ncurses')
+makedepends=('make' 'gcc')
+
+source=("https://github.com/vim/vim/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('30efb714ed82c5d7a1491f3e4aac6487d2c493d33c834d7ef043e6f45176772e')
+
+build() {
+    cd "${srcdir}/vim-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --with-features=huge \
+        --enable-gui=no \
+        --without-x \
+        --disable-gpm \
+        --disable-netbeans \
+        --with-tlib=ncursesw
+    make
+}
+
+package() {
+    cd "${srcdir}/vim-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    ln -sf vim "${pkgdir}/usr/bin/vi"
+    ln -sf vim.1.gz "${pkgdir}/usr/share/man/man1/vi.1.gz"
+}
