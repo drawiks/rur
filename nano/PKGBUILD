@@ -1,0 +1,27 @@
+pkgname=nano
+pkgver=9.2
+pkgrel=1
+pkgdesc="Pico editor clone with enhancements"
+url="https://www.nano-editor.org/"
+license=('GPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'ncurses')
+makedepends=('make' 'gcc')
+
+source=("https://ftp.gnu.org/gnu/nano/nano-${pkgver}.tar.xz")
+sha256sums=('05ecb99247b782e8a5b3a25ed4101dd034b0236902f7449bc9795b717642f7e9')
+
+build() {
+    cd "${srcdir}/nano-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-nls \
+        --enable-utf8 \
+        --without-libmagic
+    make -j"${nproc}"
+}
+
+package() {
+    cd "${srcdir}/nano-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}

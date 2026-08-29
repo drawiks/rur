@@ -1,0 +1,29 @@
+pkgname=sqlite
+pkgver=3530400
+pkgrel=1
+pkgdesc="A self-contained, embeddable, zero-configuration SQL database engine"
+url="https://www.sqlite.org/"
+license=('Public-Domain')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://sqlite.org/2026/sqlite-autoconf-${pkgver}.tar.gz")
+sha256sums=('0e9483900e92cd5de8fd48d16bf9200145a61f7fd5be542a5ac81d8a9516eb9c')
+
+build() {
+    cd "${srcdir}/sqlite-autoconf-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --enable-shared \
+        --enable-static \
+        --enable-fts5 \
+        --enable-json1
+    make -j"${nproc}"
+}
+
+package() {
+    cd "${srcdir}/sqlite-autoconf-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/libsqlite3.a"
+}

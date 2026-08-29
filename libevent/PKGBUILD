@@ -1,0 +1,30 @@
+pkgname=libevent
+pkgver=2.1.13
+pkgrel=1
+pkgdesc="Event notification library"
+url="https://libevent.org/"
+license=('BSD-3-Clause')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://github.com/libevent/libevent/releases/download/release-${pkgver}-stable/libevent-${pkgver}-stable.tar.gz")
+sha256sums=('f7e9383b8c0baa81b687e5b5eecc01beefaf1b19b64151d95ed61647fe7a315c')
+
+build() {
+    cd "${srcdir}/libevent-${pkgver}-stable"
+    ./configure \
+        --prefix=/usr \
+        --disable-openssl \
+        --disable-libevent-regress
+    make -j"${nproc}"
+}
+
+package() {
+    cd "${srcdir}/libevent-${pkgver}-stable"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/libevent.a" \
+        "${pkgdir}/usr/lib/libevent_core.a" \
+        "${pkgdir}/usr/lib/libevent_extra.a" \
+        "${pkgdir}/usr/lib/libevent_pthreads.a"
+}

@@ -1,0 +1,30 @@
+pkgname=runit
+pkgver=2.3.1
+pkgrel=1
+pkgdesc="A UNIX init scheme with service supervision"
+url="https://smarden.org/runit/"
+license=('BSD-3-Clause')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://smarden.org/runit/runit-${pkgver}.tar.gz")
+sha256sums=('634f23c8c4d1d440043be0fe928ddf904626289e97bfe7c5826e93aaf2cc6fe9')
+
+build() {
+    cd "${srcdir}/admin/runit-${pkgver}/src"
+    make -j"${nproc}" \
+        CC="${CC:-cc}" \
+        CFLAGS="-O2 -Wall -D_GNU_SOURCE"
+}
+
+package() {
+    local srcdir_root="${srcdir}/admin/runit-${pkgver}"
+    local bindir="${pkgdir}/usr/bin"
+    local mandir="${pkgdir}/usr/share/man/man8"
+    install -d -m 0755 "${bindir}" "${mandir}"
+    for bin in chpst runit runit-init runsv runsvchdir runsvdir sv svlogd utmpset; do
+        install -m 0755 "${srcdir_root}/src/${bin}" "${bindir}/${bin}"
+    done
+    install -m 0644 "${srcdir_root}"/man/*.8 "${mandir}/"
+}

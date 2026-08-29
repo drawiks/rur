@@ -1,0 +1,32 @@
+pkgname=dropbear
+pkgver=2026.94
+pkgrel=1
+pkgdesc="Lightweight SSH2 server and client"
+url="https://matt.ucc.asn.au/dropbear/dropbear.html"
+license=('MIT')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://matt.ucc.asn.au/dropbear/releases/dropbear-${pkgver}.tar.bz2")
+sha256sums=('e098034a843699200c8c977a991fff73159735bf795d5f72ef672c41a6b1ae81')
+
+build() {
+    cd "${srcdir}/dropbear-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-zlib \
+        MULTI=1
+    make -j"${nproc}" \
+        PROGRAMS="dropbear dbclient dropbearkey dropbearconvert dropbearmulti"
+}
+
+package() {
+    cd "${srcdir}/dropbear-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    install -d -m 0755 "${pkgdir}/etc/dropbear" \
+        "${pkgdir}/usr/bin"
+    for t in dropbear ssh dbclient scp dropbearkey dropbearconvert; do
+        ln -sf dropbearmulti "${pkgdir}/usr/bin/${t}"
+    done
+}

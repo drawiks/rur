@@ -1,0 +1,35 @@
+pkgname=sudo
+pkgver=1.9.17p2
+pkgrel=1
+pkgdesc="Give certain users the ability to run some commands as root"
+url="https://www.sudo.ws/"
+license=('ISC')
+arch=('x86_64')
+depends=('musl')
+makedepends=('make' 'gcc')
+
+source=("https://www.sudo.ws/dist/sudo-${pkgver}.tar.gz")
+sha256sums=('4a38a1ab3adb1199257edc2a7c4a2bd714665eb605b04368843b06dada2cfcfb')
+
+build() {
+    cd "${srcdir}/sudo-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --libexecdir=/usr/lib/sudo \
+        --localstatedir=/var \
+        --disable-nls \
+        --disable-pam \
+        --disable-openssl \
+        --disable-sendmail \
+        --without-audit \
+        --without-kerberos5 \
+        --without-sssd
+    make -j"${nproc}"
+}
+
+package() {
+    cd "${srcdir}/sudo-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    install -d -m 0755 "${pkgdir}/etc/sudoers.d"
+}

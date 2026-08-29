@@ -1,0 +1,25 @@
+pkgname=tmux
+pkgver=3.7c
+pkgrel=1
+pkgdesc="Terminal multiplexer"
+url="https://tmux.github.io/"
+license=('ISC')
+arch=('x86_64')
+depends=('musl' 'libevent' 'ncurses')
+makedepends=('make' 'gcc')
+
+source=("https://github.com/tmux/tmux/releases/download/${pkgver}/tmux-${pkgver}.tar.gz")
+sha256sums=('7c60cae9a0e25288e2e24750aafc9e8800fc7fd4555e447e1b29ee4201cfb3bf')
+
+build() {
+    cd "${srcdir}/tmux-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-static
+    make -j"${nproc}"
+}
+
+package() {
+    cd "${srcdir}/tmux-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}
