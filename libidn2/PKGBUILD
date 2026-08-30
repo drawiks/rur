@@ -1,0 +1,29 @@
+pkgname=libidn2
+pkgver=2.3.8
+pkgrel=1
+pkgdesc="Internationalized domain names (IDNA2008/TR46) library"
+url="https://www.gnu.org/software/libidn/#libidn2"
+license=('GPL-3.0-or-later' 'LGPL-3.0-or-later')
+arch=('x86_64')
+depends=('musl' 'libunistring')
+makedepends=('make' 'gcc')
+
+source=("https://ftp.gnu.org/gnu/libidn/libidn2-${pkgver}.tar.gz")
+sha256sums=('f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a')
+
+build() {
+    cd "${srcdir}/libidn2-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-static \
+        --disable-doc \
+        --disable-nls \
+        --disable-rpath
+    make -j"${nproc}"
+}
+
+package() {
+    cd "${srcdir}/libidn2-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/libidn2.a"
+}

@@ -1,0 +1,29 @@
+pkgname=libpsl
+pkgver=0.23.3
+pkgrel=1
+pkgdesc="C library for the Public Suffix List"
+url="https://github.com/rockdaboot/libpsl"
+license=('MIT')
+arch=('x86_64')
+depends=('musl' 'libidn2')
+makedepends=('make' 'gcc' 'pkgconf')
+
+source=("https://github.com/rockdaboot/libpsl/releases/download/${pkgver}/libpsl-${pkgver}.tar.gz")
+sha256sums=('93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be')
+
+build() {
+    cd "${srcdir}/libpsl-${pkgver}"
+    ./configure \
+        --prefix=/usr \
+        --disable-static \
+        --enable-runtime=libidn2 \
+        --disable-nls \
+        --disable-rpath
+    make -j"${nproc}"
+}
+
+package() {
+    cd "${srcdir}/libpsl-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    rm -f "${pkgdir}/usr/lib/libpsl.a"
+}

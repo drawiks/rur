@@ -5,8 +5,8 @@ pkgdesc="URL transfer library and tools"
 url="https://curl.se"
 license=('MIT')
 arch=('x86_64')
-depends=('openssl' 'zlib' 'musl')
-makedepends=('make')
+depends=('openssl' 'zlib' 'musl' 'libidn2' 'libpsl')
+makedepends=('make' 'pkgconf')
 
 source=("https://curl.se/download/curl-${pkgver}.tar.xz")
 sha256sums=('aa1b66a70eace83dc624508745646c08ae561de512ab403adffb93ac87fc72e6')
@@ -17,6 +17,8 @@ build() {
         --prefix=/usr \
         --with-openssl \
         --with-zlib \
+        --with-libidn2 \
+        --with-libpsl \
         --disable-static \
         --enable-ipv6 \
         --disable-manual
